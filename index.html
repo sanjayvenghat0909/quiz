@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * 
+{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-size: 20px;
+}  
+body 
+{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
+}
+.container 
+{
+    height: 500px;
+    width: 500px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+
+} 
+.container>* 
+{
+    margin-left: 30px;
+} 
+.answers p 
+{
+    padding: 10px 40px 10px 40px;
+    background-color: rgba(139, 134, 134, 0.959);
+    margin: 20px;
+    border-radius: 20px;
+    cursor: pointer
+}  
+.next 
+{  
+    margin-left: 0px;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+.next a
+{
+text-decoration: none;
+text-transform: uppercase;
+padding: 10px 30px 10px 30px;
+background-color: rgb(19, 207, 19);
+border-radius: 20px;
+
+} 
+.next .first
+{
+    margin-left: 40px;
+}
+.next :nth-child(1)
+{
+    margin-right: 30px;
+}
+.answers p:hover 
+{
+    background-color: red;
+}
+.score_upgrade 
+{
+    height: 30px;
+    width: 200px;
+    background-color: aquamarine;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-radius: 30px;
+} 
+.progress_bar 
+{
+    background-color: green;
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    color: red;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+    </style>
+   
+</head>
+<body>
+    <div class="container">
+        <div class="score_upgrade">
+            <div class="progress_bar">
+               
+
+            </div>
+        </div>
+        <div class="question_element">
+            
+        </div> 
+        <div class="answers">
+            <answer>answers</answer>
+        </div>
+        <div class="next"> 
+            <div class="first"><a class="check_answer" href="#">check answer</a></div>
+            <div><a class="plus" href="#">next</a></div>
+            
+        </div>
+    </div>
+   
+   
+
+    
+    
+</body>
+<script>
+    (function(){
+        let questiones=[
+            {
+                questions:"1]What are the higher order functions in the javascript",
+                answer:{
+                    new: false,
+                    map: true,
+                    fetch: false,
+                    await: false
+                }
+            },{
+                questions:"2]what the functions are",
+                answer:{
+                    first_citize_in_javascript: true,
+                    not_important: false,
+                    rather_to_say: true,
+                    none:false,
+                }
+            }, {
+                questions:"3]const and let belongs which scope",
+                answer:{
+                    local: false,
+                    global: true,
+                    function_scope: false,
+                    none_of_the_above: false
+                }
+            },{
+                questions:"4]var belongs to which scope",
+                answer:{
+                    function_scope: true,
+                    global_scope: false,
+                    none_of_the_above: true,
+                    rather_to_say:false,
+                }
+            },
+            {
+                questions:"5]which is the two things that the promises will return",
+                answer:{
+                    resolve: false,
+                    map: true,
+                    fetch: false,
+                    none: false
+                }
+            },{
+                questions:"6]who developed the javascript",
+                answer:{
+                    brendon_eich: true,
+                    not_important: false,
+                    rather_to_say: true,
+                    none:false,
+                }
+            }
+        ];
+    
+        let questions_element=document.querySelector(".question_element");
+        let next_button=document.querySelector(".plus");
+        let answer_element=document.querySelector(".answers");
+        let check_answer=document.querySelector(".check_answer");
+        let question_number=0;
+        let count=0;
+        let progress_bar = document.querySelector(".progress_bar");
+        function question_display() {
+            if (question_number < questiones.length) {
+                let question_index = questiones[question_number].questions;  
+                let answer_index = questiones[question_number].answer;
+                questions_element.innerHTML = "";
+                answer_element.innerHTML = "";
+                let para = document.createElement("p");
+                para.innerHTML = question_index;
+                questions_element.appendChild(para);
+                for (let val in answer_index) {  
+                    let ans_para = document.createElement("p");
+                    ans_para.innerHTML = val;
+                    answer_element.appendChild(ans_para);
+                    ans_para.addEventListener("click", () => {
+                        event.preventDefault();
+                        if (answer_index[val] === true) {   
+                            count++;
+                            check_answer.addEventListener("click", () => {
+                                
+                                let width_progress = `${(count / (questiones.length)) * 100}%`;
+                                progress_bar.style.width = width_progress;
+                                progress_bar.innerHTML = width_progress;
+                            });
+                        }
+                    });
+                }
+                increment();
+            } else {
+                showCompletionMessage();
+            }
+        } 
+    
+        function increment() {
+            next_button.addEventListener("click", () => { 
+                event.preventDefault();
+                question_number++;
+                question_display(question_number);
+            });
+        }
+    
+        function showCompletionMessage() {
+            questions_element.innerHTML = "Thanks for Completion! and your score is "+count;
+            questions_element.style.width="100%"
+            questions_element.style.height="100%";
+            questions_element.style.display="flex"
+            questions_element.style.justifyContent="center"
+            questions_element.style.alignItems="center"
+            answer_element.innerHTML = "";
+            next_button.style.display = "none";
+            check_answer.style.display = "none";
+            let progress_bar = document.querySelector(".progress_bar");
+            progress_bar.style.display = "none";
+            let upgrader=document.querySelector(".score_upgrade")
+            upgrader.style.display="none"
+        }
+    
+        question_display();
+    })();
+    
+</script>
+
+</html>
